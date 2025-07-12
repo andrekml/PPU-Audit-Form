@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Excel Meter Data Capture App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 30px;
+      background: #f7f7f7;
+    }
+    h1 { text-align: center; }
+    form {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 8px #ccc;
+    }
+    .form-section {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .form-group {
+      flex: 1 1 220px;
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 8px;
+    }
+    label { font-size: 13px; margin-bottom: 4px; }
+    input, select, textarea {
+      padding: 6px;
+      font-size: 14px;
+      border-radius: 4px;
+      border: 1px solid #bbb;
+    }
+    textarea { resize: vertical; }
+    .btns {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .btns button {
+      padding: 12px 24px;
+      font-size: 16px;
+      margin: 0 8px;
+      background: #0078d7;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .btns button:disabled { background: #bbb; }
+    table {
+      margin: 30px auto;
+      border-collapse: collapse;
+      width: 98%;
+      background: #fff;
+      box-shadow: 0 0 8px #ccc;
+    }
+    th, td {
+      border: 1px solid #bbb;
+      padding: 6px;
+      font-size: 13px;
+      text-align: left;
+    }
+    th { background: #f0f0f0; }
+    .toolbar {
+      text-align: center;
+      margin: 10px 0 30px 0;
+    }
+    .toolbar button {
+      padding: 10px 20px;
+      background: #28a745;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-size: 15px;
+      cursor: pointer;
+      margin: 0 10px;
+    }
+    .toolbar button.save {
+      background: #0078d7;
+    }
+    .toolbar button.load {
+      background: #f39c12;
+    }
+    .toolbar button.clear {
+      background: #e74c3c;
+    }
+    .toolbar input[type="file"] {
+      display: inline-block;
+      margin-left: 10px;
+    }
+  </style>
+  <!-- SheetJS CDN -->
+  <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+  <h1>Excel Meter Data Capture App</h1>
+  <form id="dataForm">
+    <div class="form-section">
+      <div class="form-group"><label>Workorder No</label><input name="Workorder No" required></div>
+      <div class="form-group"><label>Zone</label><input name="Zone"></div>
+      <div class="form-group"><label>Sector</label><input name="Sector"></div>
+      <div class="form-group"><label>CNC</label><input name="CNC"></div>
+      <div class="form-group"><label>Contractor Name or Source</label><input name="Contractor Name or Source"></div>
+      <div class="form-group"><label>Date</label><input type="date" name="Date"></div>
+      <div class="form-group"><label>Feeder Name</label><input name="Feeder Name"></div>
+      <div class="form-group"><label>Township Name</label><input name="Township Name"></div>
+      <div class="form-group"><label>Transformer No</label><input name="Transformer No"></div>
+      <div class="form-group"><label>Stand No</label><input name="Stand No"></div>
+      <div class="form-group"><label>Installation No</label><input name="Installation No"></div>
+      <div class="form-group"><label>Latitude</label><input name="Latitude" type="number" step="any"></div>
+      <div class="form-group"><label>Longitude</label><input name="Longitude" type="number" step="any"></div>
+      <div class="form-group"><label>Access</label><select name="Access"><option value="">--</option><option value="Yes">Yes</option><option value="No">No</option></select></div>
+      <div class="form-group"><label>At Home</label><select name="At Home"><option value="">--</option><option value="Yes">Yes</option><option value="No">No</option></select></div>
+      <div class="form-group"><label>Connected</label><select name="Connected"><option value="">--</option><option value="Yes">Yes</option><option value="No">No</option></select></div>
+      <div class="form-group"><label>Abandoned</label><select name="Abandoned"><option value="">--</option><option value="Yes">Yes</option><option value="No">No</option></select></div>
+      <div class="form-group"><label>Vandalised</label><select name="Vandalised"><option value="">--</option><option value="Yes">Yes</option><option value="No">No</option></select></div>
+      <div class="form-group"><label>Illegal</label><select name="Illegal"><option value="">--</option><option value="Yes">Yes</option><option value="No">No</option></select></div>
+      <div class="form-group"><label>Owner</label><select name="Owner"><option value="">--</option><option value="Yes">Yes</option><option value="No">No</option></select></div>
+      <div class="form-group"><label>Surname</label><input name="Surname"></div>
+      <div class="form-group"><label>Name</label><input name="Name"></div>
+      <div class="form-group"><label>ID No</label><input name="ID No"></div>
+      <div class="form-group"><label>Phone Code</label><input name="Phone Code"></div>
+      <div class="form-group"><label>Phone No</label><input name="Phone No"></div>
+      <div class="form-group"><label>Normal Vendor</label><select name="Normal Vendor"><option value="">--</option><option value="Yes">Yes</option><option value="No">No</option></select></div>
+      <div class="form-group"><label>Most Recent Vendor</label><input name="Most Recent Vendor"></div>
+      <div class="form-group"><label>Meter No</label><input name="Meter No"></div>
+      <div class="form-group"><label>Split</label><select name="Split"><option value="">--</option><option value="Yes">Yes</option><option value="No">No</option></select></div>
+      <div class="form-group"><label>Common or Non Common Base Meter</label><input name="Common or Non Common Base Meter"></div>
+      <div class="form-group"><label>ED/ECU</label><input name="ED/ECU"></div>
+      <div class="form-group"><label>Meter Type</label><input name="Meter Type"></div>
+      <div class="form-group"><label>Tariff Code</label><input name="Tariff Code"></div>
+      <div class="form-group"><label>Amp Limit</label><input name="Amp Limit"></div>
+      <div class="form-group"><label>Supply Group Code</label><input name="Supply Group Code"></div>
+      <div class="form-group"><label>Mag card/Keypad</label><input name="Mag card/Keypad"></div>
+      <div class="form-group"><label>STS or Prop</label><input name="STS or Prop"></div>
+      <div class="form-group"><label>Tampered</label><select name="Tampered"><option value="">--</option><option value="Yes">Yes</option><option value="No">No</option></select></div>
+      <div class="form-group"><label>Tamper Method</label><input name="Tamper Method"></div>
+      <div class="form-group"><label>Removed</label><select name="Removed"><option value="">--</option><option value="Yes">Yes</option><option value="No">No</option></select></div>
+      <div class="form-group"><label>Tamper Not No</label><input name="Tamper Not No"></div>
+      <div class="form-group"><label>Card Trip (Pass/Fail)</label><select name="Card Trip"><option value="">--</option><option value="Pass">Pass</option><option value="Fail">Fail</option></select></div>
+      <div class="form-group"><label>E/L Test(Pass/Fail)</label><select name="E/L Test"><option value="">--</option><option value="Pass">Pass</option><option value="Fail">Fail</option></select></div>
+      <div class="form-group"><label>Meter Faulty</label><select name="Meter Faulty"><option value="">--</option><option value="Yes">Yes</option><option value="No">No</option></select></div>
+      <div class="form-group"><label>Replaced</label><select name="Replaced"><option value="">--</option><option value="Yes">Yes</option><option value="No">No</option></select></div>
+      <div class="form-group"><label>MMF No</label><input name="MMF No"></div>
+      <div class="form-group"><label>New Meter No</label><input name="New Meter No"></div>
+      <div class="form-group"><label>New Meter Type</label><input name="New Meter Type"></div>
+      <div class="form-group"><label>New Meter Amp Limit</label><input name="New Meter Amp Limit"></div>
+      <div class="form-group"><label>New Meter Card Trip(Pass/Fail)</label><select name="New Meter Card Trip"><option value="">--</option><option value="Pass">Pass</option><option value="Fail">Fail</option></select></div>
+      <div class="form-group"><label>New Meter E/L Test (Pass/Fail)</label><select name="New Meter E/L Test"><option value="">--</option><option value="Pass">Pass</option><option value="Fail">Fail</option></select></div>
+      <div class="form-group"><label>Sealed</label><select name="Sealed"><option value="">--</option><option value="Yes">Yes</option><option value="No">No</option></select></div>
+      <div class="form-group"><label>Seal No</label><input name="Seal No"></div>
+      <div class="form-group" style="flex: 1 1 100%;"><label>Remarks</label><textarea name="Remarks" rows="2"></textarea></div>
+    </div>
+    <div class="btns">
+      <button type="submit">Add Row</button>
+      <button type="reset">Clear Form</button>
+    </div>
+  </form>
+  <div class="toolbar">
+    <button class="export" onclick="exportToExcel()">Export to Excel</button>
+    <button class="save" onclick="saveData()">Save Data</button>
+    <button class="load" onclick="document.getElementById('fileInput').click()">Load Data</button>
+    <button class="clear" onclick="clearSavedData()">Clear Saved Data</button>
+    <input type="file" id="fileInput" accept=".json" style="display:none">
+  </div>
+  <div id="tableContainer"></div>
+
+  <script>
+    // Fields for table and export
+    const fields = [
+      "Workorder No","Zone","Sector","CNC","Contractor Name or Source","Date","Feeder Name","Township Name","Transformer No","Stand No",
+      "Installation No","Latitude","Longitude","Access","At Home","Connected","Abandoned","Vandalised","Illegal","Owner","Surname","Name",
+      "ID No","Phone Code","Phone No","Normal Vendor","Most Recent Vendor","Meter No","Split","Common or Non Common Base Meter","ED/ECU",
+      "Meter Type","Tariff Code","Amp Limit","Supply Group Code","Mag card/Keypad","STS or Prop","Tampered","Tamper Method","Removed",
+      "Tamper Not No","Card Trip","E/L Test","Meter Faulty","Replaced","MMF No","New Meter No","New Meter Type","New Meter Amp Limit",
+      "New Meter Card Trip","New Meter E/L Test","Sealed","Seal No","Remarks"
+    ];
+
+    let dataRows = [];
+
+    // Load data from localStorage if available
+    function loadFromLocalStorage() {
+      const saved = localStorage.getItem('meterDataRows');
+      if (saved) {
+        try {
+          dataRows = JSON.parse(saved);
+        } catch (e) {
+          dataRows = [];
+        }
+      }
+    }
+
+    loadFromLocalStorage();
+
+    function renderTable() {
+      if (dataRows.length === 0) {
+        document.getElementById('tableContainer').innerHTML = "<p style='text-align:center;color:#666;'>No data captured yet.</p>";
+        return;
+      }
+      let html = "<table><thead><tr>";
+      for (const field of fields) {
+        html += `<th>${field}</th>`;
+      }
+      html += "<th>Delete</th></tr></thead><tbody>";
+      dataRows.forEach((row, i) => {
+        html += "<tr>";
+        for (const field of fields) {
+          html += `<td>${row[field] ?? ''}</td>`;
+        }
+        html += `<td><button onclick="deleteRow(${i})">Delete</button></td>`;
+        html += "</tr>";
+      });
+      html += "</tbody></table>";
+      document.getElementById('tableContainer').innerHTML = html;
+    }
+
+    function deleteRow(idx) {
+      dataRows.splice(idx, 1);
+      saveToLocalStorage();
+      renderTable();
+    }
+
+    document.getElementById('dataForm').onsubmit = function(e) {
+      e.preventDefault();
+      const form = e.target;
+      let row = {};
+      for (const field of fields) {
+        row[field] = form[field]?.value ?? "";
+      }
+      dataRows.push(row);
+      saveToLocalStorage();
+      renderTable();
+      form.reset();
+    };
+
+    // Export with SheetJS
+    function exportToExcel() {
+      if (dataRows.length === 0) {
+        alert("No data to export!");
+        return;
+      }
+      // Prepare worksheet data
+      const ws_data = [fields].concat(dataRows.map(row => fields.map(f => row[f] ?? "")));
+      const ws = XLSX.utils.aoa_to_sheet(ws_data);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Meter Data");
+      XLSX.writeFile(wb, "meter-data-capture.xlsx");
+    }
+
+    // Save data to localStorage
+    function saveToLocalStorage() {
+      localStorage.setItem('meterDataRows', JSON.stringify(dataRows));
+    }
+
+    // Manual Save as .json
+    function saveData() {
+      const blob = new Blob([JSON.stringify(dataRows, null, 2)], {type: "application/json"});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = "meter-data-capture.json";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    // Load data from a .json file
+    document.getElementById('fileInput').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        try {
+          const loaded = JSON.parse(evt.target.result);
+          if (Array.isArray(loaded)) {
+            dataRows = loaded;
+            saveToLocalStorage();
+            renderTable();
+            alert('Data loaded successfully!');
+          } else {
+            alert('Invalid file format.');
+          }
+        } catch (err) {
+          alert('Failed to load file: ' + err);
+        }
+      };
+      reader.readAsText(file);
+      e.target.value = "";
+    });
+
+    // Clear saved data
+    function clearSavedData() {
+      if (confirm("Are you sure you want to clear all saved data? This cannot be undone.")) {
+        dataRows = [];
+        localStorage.removeItem('meterDataRows');
+        renderTable();
+      }
+    }
+
+    renderTable();
+  </script>
+</body>
+</html>
